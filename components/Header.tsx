@@ -13,6 +13,9 @@ export default function Header() {
   <a href="#home" className="hover:text-blue-600">Home</a>
   <a href="#services" className="hover:text-blue-600">Services</a>
   <a href="#why-us" className="hover:text-blue-600">Why Us</a>
+  <a href="#certificates" className="hover:text-blue-600">
+  Certificates
+</a>
   <a href="#contact" className="hover:text-blue-600">Contact</a>
 </nav>
   

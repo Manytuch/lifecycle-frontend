@@ -7,6 +7,7 @@ export default function Contact() {
                 {/* Left content */}
                 <div>
                     <h2 className="text-3xl md:text-4xl font-bold">
+                        
                         Request a Quote
                     </h2>
                     <p className="mt-4 text-gray-300 text-lg">
