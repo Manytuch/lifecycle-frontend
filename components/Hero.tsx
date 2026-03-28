@@ -1,48 +1,82 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { Autoplay } from "swiper/modules";
+
+
+type Homepage = {
+  hero_title: string;
+  hero_subtitle: string;
+  hero_images: any[];
+};
+
 export default function Hero() {
-    return (
-        <section id="home" className="bg-gray-50">
-            <div className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+  const [homepage, setHomepage] = useState<Homepage | null>(null);
 
-                {/* Left content */}
-                <div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-                        Reliable Logistics & Trading Solutions <br />
-                        <span className="text-blue-600">Across South Sudan</span>
-                    </h1>
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/homepage?populate=hero_images`)
+      .then((res) => res.json())
+      .then((data) => setHomepage(data.data));
+  }, []);
 
-                    <p className="mt-6 text-lg text-gray-600">
-                        We provide efficient customs clearance, transportation,
-                        warehousing, brokerage, and general supply services at
-                        Nimule Border Station and Juba International Airport.
-                    </p>
+  if (!homepage) return null;
 
-                    <div className="mt-8 flex flex-wrap gap-4">
-                        <a
-                            href="#contact"
-                            className="bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-700 transition"
-                        >
-                            Request a Quote
-                        </a>
+  return (
+    <section id="home" className="bg-gray-50 py-20">
+      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
 
-                        <a
-                            href="#contact"
-                            className="border border-gray-300 px-6 py-3 rounded-md text-lg font-medium hover:border-blue-600 hover:text-blue-600 transition"
-                        >
-                            Contact Us
-                        </a>
-                    </div>
-                </div>
+        {/* Text */}
+        <div>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
+            {homepage.hero_title}
+          </h1>
 
-                {/* Right visual placeholder */}
-                <div className="w-full h-80 rounded-lg overflow-hidden">
-  <img
-    src="/hero-logistics.jpeg"
-    alt="Logistics and customs operations"
-    className="w-full h-full object-cover"
-  />
-</div>
+          <p className="mt-6 text-lg text-gray-600">
+            {homepage.hero_subtitle}
+          </p>
 
-            </div>
-        </section>
-    );
+          <div className="mt-8 flex gap-4">
+            <a
+              href="#contact"
+              className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition"
+            >
+              Request a Quote
+            </a>
+
+            <a
+              href="#contact"
+              className="border border-gray-300 px-6 py-3 rounded-md font-medium hover:border-blue-600 hover:text-blue-600 transition"
+            >
+              Contact Us
+            </a>
+          </div>
+        </div>
+
+        {/* Image Slider */}
+        <div className="w-full h-80 rounded-lg overflow-hidden">
+          
+<Swiper
+  modules={[Autoplay]}
+  spaceBetween={10}
+  slidesPerView={1}
+  loop
+  autoplay={{ delay: 3000 }}
+>
+  {homepage.hero_images?.map((img: any) => (
+    <SwiperSlide key={img.id}>
+      <img
+        src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${img.url}`}
+        alt="Hero"
+        className="w-full h-[320px] object-cover"
+      />
+    </SwiperSlide>
+  ))}
+</Swiper>
+        </div>
+
+      </div>
+    </section>
+  );
 }
