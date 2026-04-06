@@ -1,67 +1,89 @@
-import { ShieldCheck, FileText, CheckCircle } from "lucide-react";
+"use client";
 
-/* Map icon names from Strapi → Lucide icons */
-const iconMap: any = {
-  FileText,
-  ShieldCheck,
-  CheckCircle,
-};
+import { CheckCircle, ShieldCheck, FileCheck } from "lucide-react";
+import { motion } from "framer-motion";
 
-/* Fetch certificates from Strapi */
-async function getCertificates() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/certificates`,
-    { cache: "no-store" }
-  );
+const certificates = [
+  {
+    icon: ShieldCheck,
+    title: "Regulatory Compliance",
+    description:
+      "We operate in accordance with all applicable customs, trade, and operational regulations.",
+  },
+  {
+    icon: CheckCircle,
+    title: "Trade & Business License",
+    description:
+      "Licensed to provide logistics, customs clearance, brokerage, warehousing, and general supply services.",
+  },
+  {
+    icon: FileCheck,
+    title: "Business Registration Certificate",
+    description:
+      "Legally registered and authorized to operate in South Sudan.",
+  },
+];
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch certificates");
-  }
-
-  const data = await res.json();
-  return data.data;
-}
-
-export default async function Certificates() {
-  const certificates = await getCertificates();
-
+export default function Certificates() {
   return (
-    <section id="certificates" className="bg-gray-50 py-20">
+    <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6">
 
-        {/* Section header */}
-        <div className="text-center max-w-2xl mx-auto">
+        {/* HEADER */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center max-w-2xl mx-auto"
+        >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
             Certificates & Licenses
           </h2>
-          <p className="mt-4 text-lg text-gray-600">
-            We are a fully registered and compliant company, operating under the
-            required legal and regulatory frameworks.
+          <p className="mt-4 text-gray-600">
+            Fully registered and compliant under all required legal and regulatory frameworks.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Certificates grid */}
-        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {certificates.map((item: any) => {
-            const Icon = iconMap[item.icon] || FileText;
+        {/* GRID */}
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
+          {certificates.map((item, index) => {
+            const Icon = item.icon;
 
             return (
-              <div
-                key={item.id}
-                className="bg-white border border-gray-200 rounded-lg p-6 text-center hover:shadow-lg transition-all"
-              >
-                <div className="w-14 h-14 mx-auto flex items-center justify-center rounded-full bg-blue-50 text-blue-600">
-                  <Icon size={28} />
-                </div>
+              <motion.div
+                key={index}
+                className="text-center bg-gray-50 p-8 rounded-xl hover:shadow-2xl transition-all duration-300 group"
 
-                <h3 className="mt-5 text-xl font-semibold text-gray-900">
+                /* SCROLL ANIMATION */
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                viewport={{ once: true }}
+
+                /* HOVER */
+                whileHover={{ y: -6 }}
+              >
+
+                {/* ICON */}
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  className="w-16 h-16 mx-auto flex items-center justify-center rounded-full bg-blue-100 text-blue-700"
+                >
+                  <Icon size={28} />
+                </motion.div>
+
+                {/* TITLE */}
+                <h3 className="mt-6 text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition">
                   {item.title}
                 </h3>
 
-                <p className="mt-2 text-gray-600">
+                {/* DESCRIPTION */}
+                <p className="mt-2 text-gray-600 text-sm leading-relaxed">
                   {item.description}
                 </p>
-              </div>
+
+              </motion.div>
             );
           })}
         </div>
