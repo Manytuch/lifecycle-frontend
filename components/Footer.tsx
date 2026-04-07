@@ -19,7 +19,7 @@ export default function Footer() {
           <div className="mt-6 flex gap-4">
 
             <a
-              href="https://facebook.com/YOUR_PAGE"
+              href="https://www.facebook.com/share/1B6yxPpNSW/?mibextid=wwXIfr"
               target="_blank"
               className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-blue-600 transition"
             >

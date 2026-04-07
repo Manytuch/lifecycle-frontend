@@ -114,7 +114,7 @@ export default function Hero() {
         </motion.div>
 
       </div>
-
+<section className="mt-20 ..."></section>
       {/* OPTIONAL: Zoom animation keyframes */}
       <style jsx>{`
         @keyframes zoom {
