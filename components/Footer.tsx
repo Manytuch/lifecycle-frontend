@@ -84,7 +84,7 @@ export default function Footer() {
           <ul className="mt-4 space-y-3 text-gray-400">
             <li>📍 Juba & Nimule, South Sudan</li>
             <li>📞 +211 923 339 344</li>
-            <li>✉️ rundiang03@gmail.com</li>
+            <li>✉️ info.lifecyclegeneral@gmail.com</li>
           </ul>
         </div>
 

@@ -28,6 +28,7 @@ export default function Header() {
         <nav className="hidden md:flex space-x-8 text-gray-700 font-medium">
           <a href="#home">Home</a>
           <a href="#services">Services</a>
+          <a href="#about">About Us</a>
           <a href="#why-us">Why Us</a>
           <a href="#certificates">Certificates</a>
           <a href="#contact">Contact</a>
@@ -55,6 +56,7 @@ export default function Header() {
         <div className="md:hidden bg-white shadow-lg px-6 pb-4 space-y-4 text-gray-700 font-medium">
           <a href="#home" onClick={() => setIsOpen(false)}>Home</a>
           <a href="#services" onClick={() => setIsOpen(false)}>Services</a>
+          <a href="#about">About Us</a>
           <a href="#why-us" onClick={() => setIsOpen(false)}>Why Us</a>
           <a href="#certificates" onClick={() => setIsOpen(false)}>Certificates</a>
           <a href="#contact" onClick={() => setIsOpen(false)}>Contact</a>
