@@ -21,12 +21,12 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { name: "Home", href: "#home" },
-    { name: "Services", href: "#services" },
-    { name: "About Us", href: "#about" },
-    { name: "Why Us", href: "#why-us" },
-    { name: "Certificates", href: "#certificates" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/#home" },
+    { name: "Services", href: "/#services" },
+    { name: "About Us", href: "/#about" },
+    { name: "Why Us", href: "#/why-us" },
+    { name: "Certificates", href: "#/certificates" },
+    { name: "Contact", href: "#/contact" },
   ];
 
   return (
