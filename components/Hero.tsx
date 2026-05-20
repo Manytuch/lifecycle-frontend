@@ -28,8 +28,10 @@ export default function Hero() {
   if (!homepage) return null;
 
   return (
-    <section id="home" className="relative w-full h-[90vh] overflow-hidden">
-
+    <section
+      id="home"
+      className="relative w-full h-[90vh] overflow-hidden"
+    >
       {/* SLIDER */}
       <Swiper
         modules={[Autoplay]}
@@ -42,7 +44,7 @@ export default function Hero() {
           <SwiperSlide key={img.id}>
             <div className="relative w-full h-[90vh]">
 
-              {/* Background Image with subtle zoom */}
+              {/* Background Image */}
               <img
                 src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${img.url}`}
                 alt="Hero"
@@ -51,27 +53,25 @@ export default function Hero() {
 
               {/* Overlay */}
               <div className="absolute inset-0 bg-blue-950/70 backdrop-blur-[2px]"></div>
-
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* TEXT ON TOP */}
+      {/* TEXT CONTENT */}
       <div className="absolute inset-0 flex items-center justify-center text-center px-6 z-10">
-        
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-3xl text-white"
+          className="max-w-5xl text-white mt-24 md:mt-16"
         >
 
           {/* TITLE */}
-          <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold leading-tight">
             {homepage.hero_title.split("South Sudan")[0]}
 
-            <span className="block md:inline bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent whitespace-nowrap drop-shadow-md">
+            <span className="block bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent drop-shadow-md">
               South Sudan
             </span>
           </h1>
@@ -99,7 +99,7 @@ export default function Hero() {
               href="#contact"
               className="bg-blue-600 px-7 py-3 rounded-md font-medium hover:bg-blue-700 transition shadow-lg"
             >
-              Request a Quote
+              Request a Quotation
             </a>
 
             <a
@@ -112,18 +112,22 @@ export default function Hero() {
           </div>
 
         </motion.div>
-
       </div>
-<section className="mt-20 ..."></section>
-      {/* OPTIONAL: Zoom animation keyframes */}
+
+      {/* ANIMATION */}
       <style jsx>{`
         @keyframes zoom {
-          0% { transform: scale(1.05); }
-          50% { transform: scale(1.1); }
-          100% { transform: scale(1.05); }
+          0% {
+            transform: scale(1.05);
+          }
+          50% {
+            transform: scale(1.1);
+          }
+          100% {
+            transform: scale(1.05);
+          }
         }
       `}</style>
-
     </section>
   );
 }
