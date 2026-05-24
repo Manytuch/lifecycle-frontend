@@ -511,7 +511,7 @@ export default function Services() {
               style={{
                 color: "#94a3b8",
                 fontSize: "1.02rem",
-                lineHeight: 1.8,
+                lineHeight: 1.4,
               }}
             >
               Comprehensive logistics and trading solutions designed to move your

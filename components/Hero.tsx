@@ -68,16 +68,35 @@ export default function Hero() {
         >
 
           {/* TITLE */}
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold leading-tight">
+          <h1
+            className="text-3xl sm:text-4xl md:text-6xl font-extrabold leading-tight"
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              letterSpacing: "-0.03em",
+              lineHeight: 1.05,
+            }}
+          >
             {homepage.hero_title.split("South Sudan")[0]}
 
-            <span className="block bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent drop-shadow-md">
+            <span
+              className="block drop-shadow-md"
+              style={{
+                color: "#e8c87a",
+                fontStyle: "italic",
+                fontWeight: 600,
+              }}
+            >
               South Sudan
             </span>
           </h1>
 
           {/* TYPING SUBTITLE */}
-          <p className="mt-6 text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">
+          <p
+            className="mt-6 text-lg md:text-xl text-gray-200 max-w-2xl mx-auto"
+            style={{
+              fontFamily: "'Inter', sans-serif",
+            }}
+          >
             <TypeAnimation
               sequence={[
                 homepage.hero_subtitle,
@@ -97,14 +116,24 @@ export default function Hero() {
 
             <a
               href="#contact"
-              className="bg-blue-600 px-7 py-3 rounded-md font-medium hover:bg-blue-700 transition shadow-lg"
+              className="px-7 py-3 rounded-md transition shadow-lg"
+              style={{
+                background: "linear-gradient(135deg, #c9a84c, #e8c87a)",
+                color: "#0b1628",
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 600,
+              }}
             >
               Request a Quotation
             </a>
 
             <a
               href="#contact"
-              className="border border-white/70 px-7 py-3 rounded-md font-medium hover:bg-white hover:text-black transition"
+              className="border border-white/70 px-7 py-3 rounded-md hover:bg-white hover:text-black transition"
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 500,
+              }}
             >
               Contact Us
             </a>
@@ -114,8 +143,10 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* ANIMATION */}
+      {/* ANIMATION + FONTS */}
       <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
         @keyframes zoom {
           0% {
             transform: scale(1.05);
