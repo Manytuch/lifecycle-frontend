@@ -11,13 +11,14 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import React from "react";
 
 const valueChain = [
-  { icon: Briefcase,    title: "Procurement",       description: "Strategic sourcing and acquisition of goods and logistics resources." },
-  { icon: FileCheck,    title: "Customs Clearance", description: "Efficient customs documentation and border clearance procedures." },
-  { icon: Warehouse,    title: "Warehousing",        description: "Secure storage and inventory management for client goods." },
-  { icon: Truck,        title: "Transportation",     description: "Reliable cargo movement across South Sudan." },
-  { icon: PackageCheck, title: "Delivery",           description: "Timely and professional final delivery to customer destinations." },
+  { icon: Briefcase, title: "Procurement", description: "Strategic sourcing and acquisition of goods and logistics resources." },
+  { icon: FileCheck, title: "Customs Clearance", description: "Efficient customs documentation and border clearance procedures." },
+  { icon: Warehouse, title: "Warehousing", description: "Secure storage and inventory management for client goods." },
+  { icon: Truck, title: "Transportation", description: "Reliable cargo movement across South Sudan." },
+  { icon: PackageCheck, title: "Delivery", description: "Timely and professional final delivery to customer destinations." },
 ];
 
 const coreValues = [
@@ -142,7 +143,15 @@ const SHARED_STYLES = `
 `;
 
 /* ── fade-up wrapper ── */
-const FU = ({ children, delay = 0, style = {} }) => (
+const FU = ({
+  children,
+  delay = 0,
+  style = {},
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  style?: React.CSSProperties;
+}) => (
   <motion.div
     initial={{ opacity: 0, y: 40 }}
     whileInView={{ opacity: 1, y: 0 }}

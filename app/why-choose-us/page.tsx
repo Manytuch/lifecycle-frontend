@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import {
   ShieldCheck,
   Truck,
@@ -13,17 +13,17 @@ import {
 import { motion } from "framer-motion";
 
 const features = [
-  { icon: ShieldCheck, title: "Trusted & Compliant",  description: "We are known for integrity, transparency, and dependable service in customs clearance and logistics operations." },
-  { icon: Truck,       title: "Reliable Logistics",   description: "Our transportation network guarantees safe and timely delivery across South Sudan." },
-  { icon: Clock,       title: "Fast & Efficient",     description: "Our experienced team ensures timely clearance, transportation, and delivery without unnecessary delays." },
-  { icon: Users,       title: "Experienced Team",     description: "Led by industry professionals with years of experience in freight forwarding, customs, and logistics management." },
+  { icon: ShieldCheck, title: "Trusted & Compliant", description: "We are known for integrity, transparency, and dependable service in customs clearance and logistics operations." },
+  { icon: Truck, title: "Reliable Logistics", description: "Our transportation network guarantees safe and timely delivery across South Sudan." },
+  { icon: Clock, title: "Fast & Efficient", description: "Our experienced team ensures timely clearance, transportation, and delivery without unnecessary delays." },
+  { icon: Users, title: "Experienced Team", description: "Led by industry professionals with years of experience in freight forwarding, customs, and logistics management." },
 ];
 
 const advantages = [
-  { icon: Globe2,        title: "Strategic Presence",   description: "Located at Nimule Border Station and Juba International Airport to support efficient trade movement and logistics operations." },
-  { icon: FileCheck,     title: "Customs Expertise",    description: "Strong understanding of customs procedures, documentation, and compliance requirements for seamless clearance." },
-  { icon: PackageCheck,  title: "Secure Cargo Handling",description: "Professional cargo coordination and handling processes designed to protect client goods throughout transit." },
-  { icon: CheckCircle2,  title: "Client-Centered",      description: "We prioritize reliability, communication, and tailored logistics support for every client and shipment." },
+  { icon: Globe2, title: "Strategic Presence", description: "Located at Nimule Border Station and Juba International Airport to support efficient trade movement and logistics operations." },
+  { icon: FileCheck, title: "Customs Expertise", description: "Strong understanding of customs procedures, documentation, and compliance requirements for seamless clearance." },
+  { icon: PackageCheck, title: "Secure Cargo Handling", description: "Professional cargo coordination and handling processes designed to protect client goods throughout transit." },
+  { icon: CheckCircle2, title: "Client-Centered", description: "We prioritize reliability, communication, and tailored logistics support for every client and shipment." },
 ];
 
 const SHARED_STYLES = `
@@ -47,7 +47,17 @@ const SHARED_STYLES = `
   .feat-row:hover .icon-gold{transform:rotate(3deg) scale(1.08);}
 `;
 
-const FU = ({ children, delay = 0, style = {}, className = "" }) => (
+const FU = ({
+  children,
+  delay = 0,
+  style = {},
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  style?: React.CSSProperties;
+  className?: string;
+}) => (
   <motion.div
     initial={{ opacity: 0, y: 40 }}
     whileInView={{ opacity: 1, y: 0 }}
