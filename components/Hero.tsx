@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
+// @ts-ignore: swiper CSS import has no type declarations in this environment
 import "swiper/css";
 
 import { motion } from "framer-motion";

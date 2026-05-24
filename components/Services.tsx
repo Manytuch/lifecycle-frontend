@@ -21,10 +21,18 @@ const imageMap = {
   warehousing:            "/images/warehouse.jpg",
   "brokerage-services":   "/images/brokerage.jpg",
   "general-supply":       "/images/supply.jpg",
+} as const;
+
+type Service = {
+  id: string | number;
+  icon?: keyof typeof iconMap;
+  slug: keyof typeof imageMap;
+  title: string;
+  short_description: string;
 };
 
 /* ─── Service number label ─── */
-function ServiceNumber({ n }) {
+function ServiceNumber({ n }: { n: number }) {
   return (
     <span
       style={{
@@ -46,8 +54,8 @@ function ServiceNumber({ n }) {
 }
 
 /* ─── Featured card (first / customs clearance) ─── */
-function FeaturedCard({ service, index }) {
-  const Icon = iconMap[service.icon] || Package;
+function FeaturedCard({ service, index }: { service: Service; index: number }) {
+  const Icon = service.icon ? iconMap[service.icon] : Package;
   const image = imageMap[service.slug] || "/images/default.jpg";
 
   return (
@@ -213,8 +221,8 @@ function FeaturedCard({ service, index }) {
 }
 
 /* ─── Standard card ─── */
-function ServiceCard({ service, index }) {
-  const Icon = iconMap[service.icon] || Package;
+function ServiceCard({ service, index }: { service: Service; index: number }) {
+  const Icon = service.icon ? iconMap[service.icon] : Package;
   const image = imageMap[service.slug] || "/images/default.jpg";
 
   return (
@@ -374,7 +382,7 @@ function ServiceCard({ service, index }) {
    MAIN SECTION
 ══════════════════════════════════════════ */
 export default function Services() {
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useState<Service[]>([]);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/services`)

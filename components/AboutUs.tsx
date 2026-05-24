@@ -1,11 +1,11 @@
 "use client";
-
+import React from "react";
 import { useEffect, useRef, useState } from "react";
 import { Building2, Target, Eye, ArrowRight } from "lucide-react";
 
 /* ─── Tiny hook: fires once when element enters viewport ─── */
-function useInView(threshold = 0.15) {
-  const ref = useRef(null);
+function useInView<T extends Element = HTMLElement>(threshold = 0.15) {
+  const ref = useRef<T | null>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const el = ref.current;
@@ -17,13 +17,19 @@ function useInView(threshold = 0.15) {
     obs.observe(el);
     return () => obs.disconnect();
   }, [threshold]);
-  return [ref, visible];
+  return [ref, visible] as const;
 }
 
 /* ─── Animated counter ─── */
-function Counter({ end, suffix = "" }) {
+function Counter({
+  end,
+  suffix = "",
+}: {
+  end: number;
+  suffix?: string;
+}) {
   const [count, setCount] = useState(0);
-  const [ref, visible] = useInView();
+  const [ref, visible] = useInView<HTMLSpanElement>();
   useEffect(() => {
     if (!visible) return;
     let start = 0;
@@ -39,8 +45,18 @@ function Counter({ end, suffix = "" }) {
 }
 
 /* ─── Fade-up wrapper ─── */
-function FadeUp({ children, delay = 0, className = "" }) {
-  const [ref, visible] = useInView();
+function FadeUp({
+  children,
+  delay = 0,
+  className = "",
+  style,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const [ref, visible] = useInView<HTMLDivElement>();
   return (
     <div
       ref={ref}
@@ -49,6 +65,7 @@ function FadeUp({ children, delay = 0, className = "" }) {
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(36px)",
         transition: `opacity 0.75s ease ${delay}ms, transform 0.75s ease ${delay}ms`,
+        ...style,
       }}
     >
       {children}
