@@ -1,359 +1,558 @@
 "use client";
 
-import {
-    Building2,
-    Target,
-    Eye,
-    ShieldCheck,
-    Users,
-    Briefcase,
-    Truck,
-    Warehouse,
-    FileCheck,
-    PackageCheck,
-} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Building2, Target, Eye, ArrowRight } from "lucide-react";
 
-const valueChain = [
-    {
-        icon: Briefcase,
-        title: "Procurement",
-        description:
-            "Strategic sourcing and acquisition of goods and logistics resources.",
-    },
-    {
-        icon: FileCheck,
-        title: "Customs Clearance",
-        description:
-            "Efficient customs documentation and border clearance procedures.",
-    },
-    {
-        icon: Warehouse,
-        title: "Warehousing",
-        description:
-            "Secure storage and inventory management for client goods.",
-    },
-    {
-        icon: Truck,
-        title: "Transportation",
-        description:
-            "Reliable transportation and cargo movement across South Sudan.",
-    },
-    {
-        icon: PackageCheck,
-        title: "Delivery",
-        description:
-            "Timely and professional final delivery to customer destinations.",
-    },
-];
+/* ─── Tiny hook: fires once when element enters viewport ─── */
+function useInView(threshold = 0.15) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return [ref, visible];
+}
 
-const coreValues = [
-    "Integrity",
-    "Professionalism",
-    "Reliability",
-    "Customer Satisfaction",
-    "Efficiency",
-    "Transparency",
-];
+/* ─── Animated counter ─── */
+function Counter({ end, suffix = "" }) {
+  const [count, setCount] = useState(0);
+  const [ref, visible] = useInView();
+  useEffect(() => {
+    if (!visible) return;
+    let start = 0;
+    const step = Math.ceil(end / 50);
+    const id = setInterval(() => {
+      start += step;
+      if (start >= end) { setCount(end); clearInterval(id); }
+      else setCount(start);
+    }, 28);
+    return () => clearInterval(id);
+  }, [visible, end]);
+  return <span ref={ref}>{count}{suffix}</span>;
+}
+
+/* ─── Fade-up wrapper ─── */
+function FadeUp({ children, delay = 0, className = "" }) {
+  const [ref, visible] = useInView();
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(36px)",
+        transition: `opacity 0.75s ease ${delay}ms, transform 0.75s ease ${delay}ms`,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
 
 export default function AboutUs() {
-    return (
-        <section
-            id="about"
-            className="py-14 bg-gradient-to-b from-white to-blue-50"
+  return (
+    <>
+      {/* ── Google Fonts ── */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+        .about-root {
+          --navy:   #0b1628;
+          --navy2:  #132040;
+          --gold:   #c9a84c;
+          --gold2:  #e8c87a;
+          --cream:  #faf8f3;
+          --slate:  #64748b;
+          --muted:  #94a3b8;
+          font-family: 'DM Sans', sans-serif;
+        }
+
+        .display-font { font-family: 'Cormorant Garamond', Georgia, serif; }
+
+        /* ── animated border-gradient card ── */
+        .glint-card {
+          position: relative;
+          background: #fff;
+          border-radius: 20px;
+          overflow: hidden;
+        }
+        .glint-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 20px;
+          padding: 1.5px;
+          background: linear-gradient(135deg, #c9a84c 0%, transparent 50%, #c9a84c 100%);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          opacity: 0.6;
+          transition: opacity .3s;
+        }
+        .glint-card:hover::before { opacity: 1; }
+
+        /* ── horizontal rule with fade ── */
+        .hr-fade {
+          height: 1px;
+          background: linear-gradient(90deg, transparent, var(--gold), transparent);
+          border: none;
+        }
+
+        /* ── stat pill ── */
+        .stat-pill {
+          background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+          border: 1px solid rgba(201,168,76,0.25);
+          border-radius: 16px;
+          padding: 28px 32px;
+          color: white;
+          transition: transform .3s, box-shadow .3s;
+        }
+        .stat-pill:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 40px rgba(11,22,40,0.2);
+        }
+
+        /* ── image overlay on hover ── */
+        .img-wrap img { transition: transform 1.1s ease; }
+        .img-wrap:hover img { transform: scale(1.04); }
+
+        /* ── scroll-reveal divider dot ── */
+        @keyframes ping {
+          0%   { transform: scale(1); opacity: 0.9; }
+          100% { transform: scale(2.4); opacity: 0; }
+        }
+        .ping-dot::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 50%;
+          background: var(--gold);
+          animation: ping 1.8s ease-out infinite;
+        }
+
+        /* ── background noise texture ── */
+        .noise-bg::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+          pointer-events: none;
+          z-index: 1;
+        }
+      `}</style>
+
+      <section
+        id="about"
+        className="about-root noise-bg relative overflow-hidden"
+        style={{ background: "var(--cream)" }}
+      >
+
+        {/* ══════════════════════════════════
+            HERO STRIP — dark band at top
+        ══════════════════════════════════ */}
+        <div
+          className="relative z-10"
+          style={{
+            background: "linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%)",
+            padding: "96px 24px 80px",
+          }}
         >
-            <div className="max-w-7xl mx-auto px-6">
-
-                {/* SECTION HEADER */}
-                <div className="text-center max-w-3xl mx-auto">
-                    {/* WHO WE ARE */}
-                    <section className="relative py-14 md:py-20 overflow-hidden bg-gradient-to-b from-white via-blue-50 to-white">
-                        {/* Background Glow */}
-                        <div className="absolute top-0 left-0 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-40"></div>
-                        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-200 rounded-full blur-3xl opacity-30"></div>
-
-                        <div className="relative max-w-6xl mx-auto px-6">
-
-                            {/* SECTION LABEL */}
-                            <div className="flex justify-center">
-                                <span className="bg-blue-100 text-blue-700 px-5 py-2 rounded-full text-sm font-semibold tracking-wide uppercase shadow-sm">
-                                    About Us
-                                </span>
-                            </div>
-
-                            {/* TITLE */}
-                            <h2 className="mt-6 text-center text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight">
-                                Who We Are
-                            </h2>
-
-                            {/* DECORATIVE LINE */}
-                            <div className="mt-6 flex justify-center">
-                                <div className="w-28 h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-700"></div>
-                            </div>
-
-                            {/* CONTENT CARD */}
-                            <div className="mt-8 bg-white/80 backdrop-blur-md border border-blue-100 shadow-2xl rounded-3xl p-8 md:p-14">
-
-                                <p className="text-lg md:text-2xl leading-[2.2rem] md:leading-[3rem] text-gray-700 text-center font-light">
-
-                                    <span className="font-semibold text-gray-900">
-                                        Established in 2024,
-                                    </span>{" "}
-                                    Life Cycle General Trading Company Limited has quickly become a trusted
-                                    leader in logistics and trading solutions at the Nimule Border Station
-                                    and Juba International Airport. Under the leadership of
-                                    <span className="font-semibold text-blue-700">
-                                        {" "}Mr. Silas Majok Achirin,
-                                    </span>{" "}
-                                    an industry expert with over seven years of experience in freight
-                                    forwarding and customs, the company is dedicated to providing exceptional
-                                    services and building lasting client relationships.
-
-                                    <br />
-                                    
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-
-                </div>
-
-                {/* COMPANY OVERVIEW */}
-                <div className="mt-20 grid lg:grid-cols-2 gap-14 items-center">
-
-                    {/* IMAGE */}
-                    <div className="relative">
-                        <img
-                            src="/images/about-company.jpg"
-                            alt="About Company"
-                            className="w-full h-[500px] object-cover rounded-3xl shadow-2xl"
-                        />
-
-                        <div className="absolute inset-0 bg-blue-950/20 rounded-3xl"></div>
-                    </div>
-
-                    {/* CONTENT */}
-                    <div>
-
-                        <div className="flex items-center gap-4">
-
-                            <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-700 shadow-sm">
-                                <Building2 size={30} />
-                            </div>
-
-                            <div>
-
-                                <span className="text-blue-600 font-medium uppercase tracking-wide text-sm">
-                                    Company Overview
-                                </span>
-
-                                <h3 className="text-3xl font-bold text-gray-900">
-                                    The Organization
-                                </h3>
-
-                            </div>
-
-                        </div>
-
-                        <div className="mt-8 space-y-5">
-
-                            <p className="text-gray-600 leading-relaxed text-lg">
-                                Life Cycle General Trading Company Limited operates as a dynamic
-                                logistics and trading organization focused on providing dependable
-                                customs clearance, freight forwarding, transportation,
-                                warehousing, brokerage, and supply chain support services.
-                            </p>
-
-                            <p className="text-gray-600 leading-relaxed text-lg">
-                                Our experienced team combines industry knowledge, operational
-                                efficiency, and customer-focused service to ensure smooth and
-                                reliable movement of goods across borders and within South Sudan.
-                            </p>
-
-                            <p className="text-gray-600 leading-relaxed text-lg">
-                                We continuously invest in professional service delivery,
-                                compliance, and strategic logistics partnerships to support
-                                businesses, organizations, and institutions with tailored supply
-                                chain solutions.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                {/* MISSION & VISION */}
-                <div className="mt-24 grid md:grid-cols-2 gap-8">
-
-                    {/* MISSION */}
-                    <div className="bg-white rounded-3xl p-10 shadow-sm hover:shadow-xl border border-blue-100 transition duration-300">
-
-                        <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-700">
-                            <Target size={30} />
-                        </div>
-
-                        <h3 className="mt-6 text-2xl font-bold text-gray-900">
-                            Our Mission
-                        </h3>
-
-                        <p className="mt-4 text-gray-600 leading-relaxed text-lg">
-                            To deliver exceptional services in customs clearance, transportation, warehousing,
-                            brokerage, and general supply by prioritizing efficiency, integrity, and customer
-                            satisfaction. We are committed to simplifying trade processes and supporting
-                            businesses with tailored solutions that drive success and growth
-                        </p>
-
-                    </div>
-
-                    {/* VISION */}
-                    <div className="bg-white rounded-3xl p-10 shadow-sm hover:shadow-xl border border-blue-100 transition duration-300">
-
-                        <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-700">
-                            <Eye size={30} />
-                        </div>
-
-                        <h3 className="mt-6 text-2xl font-bold text-gray-900">
-                            Our Vision
-                        </h3>
-
-                        <p className="mt-4 text-gray-600 leading-relaxed text-lg">
-                            To become the leading provider of innovative and reliable logistics, customs
-                            clearance, and trading solutions in South Sudan and beyond, fostering sustainable
-                            growth and long-term partnerships with our clients
-                        </p>
-
-                    </div>
-
-                </div>
-
-                {/* CORE VALUES */}
-                <div className="mt-24">
-
-                    <div className="text-center max-w-2xl mx-auto">
-
-                        <h3 className="text-3xl font-bold text-gray-900">
-                            Our Philosophy & Core Values
-                        </h3>
-
-                        <p className="mt-4 text-gray-600 text-lg">
-                            We believe in building long-term partnerships through trust,
-                            professionalism, and service excellence.
-                        </p>
-
-                    </div>
-
-                    <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-
-                        {coreValues.map((value, index) => (
-                            <div
-                                key={index}
-                                className="bg-white rounded-2xl p-6 text-center shadow-sm border border-blue-100 hover:shadow-lg hover:-translate-y-1 transition duration-300"
-                            >
-
-                                <div className="w-14 h-14 mx-auto rounded-full bg-blue-100 flex items-center justify-center text-blue-700">
-                                    <ShieldCheck size={26} />
-                                </div>
-
-                                <h4 className="mt-4 font-semibold text-gray-900">
-                                    {value}
-                                </h4>
-
-                            </div>
-                        ))}
-
-                    </div>
-
-                </div>
-
-                {/* MARKET APPROACH */}
-                <div className="mt-24 bg-gradient-to-r from-blue-950 to-slate-900 rounded-3xl p-10 md:p-14 text-white relative overflow-hidden shadow-2xl">
-
-                    <div className="absolute inset-0 opacity-10">
-                        <div className="w-full h-full bg-[radial-gradient(circle_at_top_right,_white,_transparent_40%)]"></div>
-                    </div>
-
-                    <div className="relative z-10">
-
-                        <div className="flex items-center gap-4">
-
-                            <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center">
-                                <Users size={28} />
-                            </div>
-
-                            <div>
-
-                                <span className="text-blue-200 uppercase tracking-wide text-sm font-medium">
-                                    Strategic Focus
-                                </span>
-
-                                <h3 className="text-3xl font-bold">
-                                    Our Market Approach
-                                </h3>
-
-                            </div>
-
-                        </div>
-
-                        <p className="mt-6 text-blue-100 leading-relaxed text-lg max-w-4xl">
-                            Our market approach is centered on customer satisfaction,
-                            operational efficiency, and strategic partnerships. We focus on
-                            delivering tailored logistics and supply chain solutions that meet
-                            the evolving needs of businesses, organizations, and institutions
-                            operating within South Sudan and cross-border trade environments.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                {/* VALUE CHAIN ANALYSIS */}
-                <div className="mt-24">
-
-                    <div className="text-center max-w-2xl mx-auto">
-
-                        <h3 className="text-3xl md:text-4xl font-bold text-gray-900">
-                            Value Chain Analysis
-                        </h3>
-
-                        <p className="mt-4 text-gray-600 text-lg">
-                            Our integrated logistics process ensures efficient movement of
-                            goods from sourcing to final delivery.
-                        </p>
-
-                    </div>
-
-                    <div className="mt-14 grid md:grid-cols-2 lg:grid-cols-5 gap-6">
-
-                        {valueChain.map((item, index) => {
-                            const Icon = item.icon;
-
-                            return (
-                                <div
-                                    key={index}
-                                    className="bg-white rounded-2xl p-8 shadow-sm border border-blue-100 hover:shadow-xl hover:-translate-y-2 transition duration-300 text-center"
-                                >
-
-                                    <div className="w-16 h-16 mx-auto rounded-2xl bg-blue-100 flex items-center justify-center text-blue-700">
-                                        <Icon size={28} />
-                                    </div>
-
-                                    <h4 className="mt-5 text-lg font-bold text-gray-900">
-                                        {item.title}
-                                    </h4>
-
-                                    <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-                                        {item.description}
-                                    </p>
-
-                                </div>
-                            );
-                        })}
-
-                    </div>
-
-                </div>
-
+          {/* faint diagonal lines */}
+          <div
+            aria-hidden
+            style={{
+              position: "absolute", inset: 0, opacity: 0.07,
+              backgroundImage: "repeating-linear-gradient(135deg, #c9a84c 0px, #c9a84c 1px, transparent 1px, transparent 60px)",
+            }}
+          />
+
+          <div className="relative max-w-5xl mx-auto text-center">
+            <FadeUp>
+              <span
+                className="inline-block text-xs font-medium uppercase tracking-[0.25em]"
+                style={{
+                  color: "var(--gold)",
+                  border: "1px solid rgba(201,168,76,0.4)",
+                  borderRadius: "100px",
+                  padding: "6px 20px",
+                }}
+              >
+                About Us
+              </span>
+            </FadeUp>
+
+            <FadeUp delay={120}>
+              <h2
+                className="display-font mt-6"
+                style={{
+                  fontSize: "clamp(2.8rem, 6vw, 5.5rem)",
+                  fontWeight: 600,
+                  lineHeight: 1.08,
+                  color: "#fff",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Who We <em style={{ color: "var(--gold)", fontStyle: "italic" }}>Are</em>
+              </h2>
+            </FadeUp>
+
+            <FadeUp delay={200}>
+              <hr className="hr-fade mx-auto mt-6" style={{ width: 80 }} />
+            </FadeUp>
+
+            {/* STATS ROW */}
+            <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { value: 2024,  suffix: "",  label: "Founded" },
+                { value: 7,     suffix: "+", label: "Years Industry Experience" },
+                { value: 100,   suffix: "%", label: "Commitment to Excellence" },
+                { value: 2,     suffix: "",  label: "Key Border Hubs" },
+              ].map(({ value, suffix, label }, i) => (
+                <FadeUp key={label} delay={280 + i * 80}>
+                  <div className="stat-pill text-center">
+                    <p
+                      className="display-font"
+                      style={{ fontSize: "2.6rem", fontWeight: 700, color: "var(--gold2)", lineHeight: 1 }}
+                    >
+                      <Counter end={value} suffix={suffix} />
+                    </p>
+                    <p style={{ fontSize: "0.78rem", color: "var(--muted)", marginTop: 8, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                      {label}
+                    </p>
+                  </div>
+                </FadeUp>
+              ))}
             </div>
-        </section>
-    );
+          </div>
+        </div>
+
+        {/* ══════════════════════════════════
+            STORY CARD
+        ══════════════════════════════════ */}
+        <div className="relative z-10 max-w-5xl mx-auto px-6" style={{ marginTop: -40 }}>
+          <FadeUp>
+            <div
+              className="glint-card"
+              style={{
+                padding: "clamp(32px,6vw,72px)",
+                boxShadow: "0 32px 80px rgba(11,22,40,0.12)",
+              }}
+            >
+              {/* left accent line */}
+              <div
+                style={{
+                  position: "absolute", top: 48, left: 0,
+                  width: 4, height: 72,
+                  background: "linear-gradient(180deg, var(--gold), transparent)",
+                  borderRadius: "0 4px 4px 0",
+                }}
+              />
+
+              <p
+                className="display-font"
+                style={{
+                  fontSize: "clamp(1.15rem, 2.2vw, 1.55rem)",
+                  lineHeight: 1.85,
+                  color: "#1e293b",
+                  fontWeight: 400,
+                }}
+              >
+                <span style={{ fontWeight: 600 }}>Established in 2024,</span> Life Cycle
+                General Trading Company Limited has quickly become a trusted leader in
+                logistics and trading solutions at the Nimule Border Station and Juba
+                International Airport. Under the leadership of{" "}
+                <span style={{ color: "var(--navy)", fontWeight: 600, fontStyle: "italic" }}>
+                  Mr. Silas Majok Achirin,
+                </span>{" "}
+                an industry expert with over seven years of experience in freight
+                forwarding and customs, the company is dedicated to providing exceptional
+                services and building lasting client relationships.
+              </p>
+
+              <hr className="hr-fade my-8" />
+
+              <p
+                className="display-font"
+                style={{
+                  fontSize: "clamp(1.15rem, 2.2vw, 1.55rem)",
+                  lineHeight: 1.85,
+                  color: "#334155",
+                  fontWeight: 400,
+                }}
+              >
+                His vision has driven the company to deliver efficient and reliable
+                solutions tailored to the diverse needs of businesses — spanning customs
+                clearance, shipping, transportation, warehousing, brokerage, and general
+                supply. With a focus on innovation and reliability, we ensure the seamless
+                movement of goods and support business success across South Sudan.
+              </p>
+            </div>
+          </FadeUp>
+        </div>
+
+        {/* ══════════════════════════════════
+            COMPANY OVERVIEW — image + text
+        ══════════════════════════════════ */}
+        <div
+          className="relative z-10 max-w-7xl mx-auto px-6"
+          style={{ marginTop: 96 }}
+        >
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+            {/* IMAGE */}
+            <FadeUp className="img-wrap relative" style={{ borderRadius: 24, overflow: "hidden" }}>
+              <div style={{ borderRadius: 24, overflow: "hidden", boxShadow: "0 40px 100px rgba(11,22,40,0.18)" }}>
+                <img
+                  src="/images/about-company.jpg"
+                  alt="About Company"
+                  style={{ width: "100%", height: 520, objectFit: "cover", display: "block" }}
+                />
+                <div
+                  style={{
+                    position: "absolute", inset: 0,
+                    background: "linear-gradient(to top, rgba(11,22,40,0.55) 0%, transparent 50%)",
+                  }}
+                />
+              </div>
+
+              {/* floating badge */}
+              <div
+                style={{
+                  position: "absolute", bottom: 28, left: 28,
+                  background: "rgba(11,22,40,0.85)",
+                  backdropFilter: "blur(12px)",
+                  border: "1px solid rgba(201,168,76,0.35)",
+                  borderRadius: 14,
+                  padding: "14px 22px",
+                  color: "#fff",
+                }}
+              >
+                <p style={{ fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 4 }}>
+                  Established
+                </p>
+                <p className="display-font" style={{ fontSize: "1.7rem", fontWeight: 700, lineHeight: 1 }}>
+                  2024
+                </p>
+              </div>
+            </FadeUp>
+
+            {/* TEXT */}
+            <FadeUp delay={160}>
+              <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 28 }}>
+                <div
+                  style={{
+                    width: 52, height: 52, borderRadius: 14,
+                    background: "linear-gradient(135deg, var(--navy), var(--navy2))",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "var(--gold)",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Building2 size={24} />
+                </div>
+                <div>
+                  <p style={{ fontSize: "0.72rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--gold)", fontWeight: 500 }}>
+                    Company Overview
+                  </p>
+                  <h3
+                    className="display-font"
+                    style={{ fontSize: "2rem", fontWeight: 700, color: "var(--navy)", lineHeight: 1.1 }}
+                  >
+                    The Organization
+                  </h3>
+                </div>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                {[
+                  "Life Cycle General Trading Company Limited operates as a dynamic logistics and trading organization focused on providing dependable customs clearance, freight forwarding, transportation, warehousing, brokerage, and supply chain support services.",
+                  "Our experienced team combines industry knowledge, operational efficiency, and customer-focused service to ensure smooth and reliable movement of goods across borders and within South Sudan.",
+                  "We continuously invest in professional service delivery, compliance, and strategic logistics partnerships to support businesses, organizations, and institutions with tailored supply chain solutions.",
+                ].map((text, i) => (
+                  <p
+                    key={i}
+                    style={{
+                      color: "#475569",
+                      lineHeight: 1.8,
+                      fontSize: "1.02rem",
+                      paddingLeft: 18,
+                      borderLeft: "2px solid",
+                      borderImage: i === 0 ? "linear-gradient(180deg, var(--gold), rgba(201,168,76,0.2)) 1" : "linear-gradient(180deg, rgba(201,168,76,0.2), transparent) 1",
+                    }}
+                  >
+                    {text}
+                  </p>
+                ))}
+              </div>
+
+              <a
+                href="#services"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 10,
+                  marginTop: 36,
+                  background: "linear-gradient(135deg, var(--navy), var(--navy2))",
+                  color: "var(--gold2)",
+                  padding: "14px 28px",
+                  borderRadius: 12,
+                  fontSize: "0.9rem",
+                  fontWeight: 500,
+                  letterSpacing: "0.04em",
+                  textDecoration: "none",
+                  transition: "transform .25s, box-shadow .25s",
+                  boxShadow: "0 8px 30px rgba(11,22,40,0.2)",
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 16px 40px rgba(11,22,40,0.25)"; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 8px 30px rgba(11,22,40,0.2)"; }}
+              >
+                Explore Our Services <ArrowRight size={16} />
+              </a>
+            </FadeUp>
+
+          </div>
+        </div>
+
+        {/* ══════════════════════════════════
+            MISSION & VISION
+        ══════════════════════════════════ */}
+        <div
+          className="relative z-10 max-w-6xl mx-auto px-6"
+          style={{ marginTop: 100, paddingBottom: 100 }}
+        >
+          {/* section label */}
+          <FadeUp className="text-center" style={{ marginBottom: 56 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16 }}>
+              <span className="ping-dot relative" style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--gold)", display: "inline-block" }} />
+              <span
+                style={{
+                  fontSize: "0.72rem", letterSpacing: "0.25em",
+                  textTransform: "uppercase", color: "var(--gold)", fontWeight: 500,
+                }}
+              >
+                Core Principles
+              </span>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--gold)", display: "inline-block" }} />
+            </div>
+            <h2
+              className="display-font"
+              style={{
+                fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                fontWeight: 600,
+                color: "var(--navy)",
+                marginTop: 12,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Mission &amp; Vision
+            </h2>
+          </FadeUp>
+
+          <div className="grid md:grid-cols-2 gap-8">
+
+            {/* MISSION */}
+            <FadeUp delay={80}>
+              <div
+                className="glint-card"
+                style={{
+                  padding: "48px 44px",
+                  boxShadow: "0 20px 60px rgba(11,22,40,0.08)",
+                  height: "100%",
+                }}
+              >
+                <div
+                  style={{
+                    width: 56, height: 56, borderRadius: 14,
+                    background: "linear-gradient(135deg, var(--navy), var(--navy2))",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "var(--gold)",
+                  }}
+                >
+                  <Target size={26} />
+                </div>
+
+                <h3
+                  className="display-font"
+                  style={{ fontSize: "1.9rem", fontWeight: 700, color: "var(--navy)", marginTop: 24, marginBottom: 16 }}
+                >
+                  Our Mission
+                </h3>
+
+                <hr className="hr-fade" style={{ marginBottom: 24 }} />
+
+                <p style={{ color: "#475569", lineHeight: 1.85, fontSize: "1rem" }}>
+                  To deliver exceptional services in customs clearance, transportation,
+                  warehousing, brokerage, and general supply by prioritizing efficiency,
+                  integrity, and customer satisfaction. We are committed to simplifying
+                  trade processes and supporting businesses with tailored solutions that
+                  drive success and growth.
+                </p>
+              </div>
+            </FadeUp>
+
+            {/* VISION */}
+            <FadeUp delay={180}>
+              <div
+                style={{
+                  background: "linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%)",
+                  borderRadius: 20,
+                  padding: "48px 44px",
+                  boxShadow: "0 20px 60px rgba(11,22,40,0.18)",
+                  height: "100%",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                {/* subtle grid */}
+                <div
+                  aria-hidden
+                  style={{
+                    position: "absolute", inset: 0, opacity: 0.05,
+                    backgroundImage: "linear-gradient(var(--gold) 1px, transparent 1px), linear-gradient(90deg, var(--gold) 1px, transparent 1px)",
+                    backgroundSize: "40px 40px",
+                  }}
+                />
+
+                <div
+                  style={{
+                    width: 56, height: 56, borderRadius: 14,
+                    background: "rgba(201,168,76,0.15)",
+                    border: "1px solid rgba(201,168,76,0.4)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "var(--gold)",
+                    position: "relative",
+                  }}
+                >
+                  <Eye size={26} />
+                </div>
+
+                <h3
+                  className="display-font"
+                  style={{ fontSize: "1.9rem", fontWeight: 700, color: "#fff", marginTop: 24, marginBottom: 16, position: "relative" }}
+                >
+                  Our Vision
+                </h3>
+
+                <hr className="hr-fade" style={{ marginBottom: 24, opacity: 0.4 }} />
+
+                <p style={{ color: "var(--muted)", lineHeight: 1.85, fontSize: "1rem", position: "relative" }}>
+                  To become the leading provider of innovative and reliable logistics,
+                  customs clearance, and trading solutions in South Sudan and beyond,
+                  fostering sustainable growth and long-term partnerships with our
+                  clients.
+                </p>
+              </div>
+            </FadeUp>
+
+          </div>
+        </div>
+
+      </section>
+    </>
+  );
 }
