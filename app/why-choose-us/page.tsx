@@ -85,6 +85,15 @@ const SHARED_STYLES = `
     --cream:#faf8f3;
   }
 
+  *{
+    box-sizing:border-box;
+  }
+
+  html,
+  body{
+    overflow-x:hidden;
+  }
+
   /* HERO */
   .page-hero {
     position: relative;
@@ -367,6 +376,8 @@ export default function WhyChooseUsPage() {
             "var(--cream)",
 
           minHeight: "100vh",
+
+          overflowX: "hidden",
         }}
       >
 
@@ -545,6 +556,9 @@ export default function WhyChooseUsPage() {
 
                     objectFit:
                       "cover",
+
+                    objectPosition:
+                      "center top",
 
                     display: "block",
 
@@ -1076,9 +1090,7 @@ export default function WhyChooseUsPage() {
 
       {/* RESPONSIVE */}
       <style>{`
-        /* ─────────────────────────────
-           LARGE TABLETS
-        ───────────────────────────── */
+        /* LARGE TABLETS */
         @media (max-width: 1200px) {
 
           .why-split {
@@ -1092,9 +1104,7 @@ export default function WhyChooseUsPage() {
 
         }
 
-        /* ─────────────────────────────
-           TABLETS
-        ───────────────────────────── */
+        /* TABLETS */
         @media (max-width: 900px) {
 
           .page-hero {
@@ -1118,18 +1128,14 @@ export default function WhyChooseUsPage() {
 
         }
 
-        /* ─────────────────────────────
-           MOBILE
-        ───────────────────────────── */
+        /* MOBILE */
         @media (max-width: 768px) {
 
-          /* HERO */
           .page-hero {
             padding:
               110px 18px 72px !important;
           }
 
-          /* GENERAL TEXT */
           main p {
             line-height:
               1.8 !important;
@@ -1139,7 +1145,6 @@ export default function WhyChooseUsPage() {
             overflow-x: hidden;
           }
 
-          /* MAIN GRID */
           .why-split {
             grid-template-columns:
               1fr !important;
@@ -1147,13 +1152,29 @@ export default function WhyChooseUsPage() {
             gap: 42px !important;
           }
 
-          /* IMAGE */
           .why-split img {
+            width:
+              100% !important;
+
             height:
-              420px !important;
+              auto !important;
+
+            max-height:
+              520px !important;
+
+            object-fit:
+              contain !important;
+
+            object-position:
+              center top !important;
+
+            background:
+              #0b1628;
+
+            border-radius:
+              22px !important;
           }
 
-          /* FEATURE ROW */
           .feat-row {
             gap: 16px !important;
 
@@ -1161,7 +1182,6 @@ export default function WhyChooseUsPage() {
               18px 0 !important;
           }
 
-          /* FEATURE ICON */
           .feat-row .icon-gold {
             width: 46px !important;
             height: 46px !important;
@@ -1170,7 +1190,6 @@ export default function WhyChooseUsPage() {
               12px !important;
           }
 
-          /* ADVANTAGE GRID */
           .adv-grid {
             grid-template-columns:
               1fr !important;
@@ -1178,7 +1197,6 @@ export default function WhyChooseUsPage() {
             gap: 16px !important;
           }
 
-          /* CARDS */
           .g-card {
             border-radius:
               18px !important;
@@ -1189,7 +1207,6 @@ export default function WhyChooseUsPage() {
               30px 22px !important;
           }
 
-          /* FLOATING BADGE */
           .why-split div[style*="bottom: 28px"] {
             left: 18px !important;
             right: 18px !important;
@@ -1200,7 +1217,6 @@ export default function WhyChooseUsPage() {
               12px 18px !important;
           }
 
-          /* HERO GLOW */
           .page-hero div[aria-hidden] {
             width: 90vw !important;
             height: 260px !important;
@@ -1208,9 +1224,7 @@ export default function WhyChooseUsPage() {
 
         }
 
-        /* ─────────────────────────────
-           SMALL PHONES
-        ───────────────────────────── */
+        /* SMALL PHONES */
         @media (max-width: 480px) {
 
           .page-hero {
@@ -1219,8 +1233,8 @@ export default function WhyChooseUsPage() {
           }
 
           .why-split img {
-            height:
-              340px !important;
+            max-height:
+              420px !important;
           }
 
           .feat-row {
