@@ -1,6 +1,5 @@
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
-import AboutUs from "@/components/AboutUs";
 import Stats from "@/components/stats";
 import Testimonial from "@/components/Testimonial";
 import Locations from "@/components/Locations";
@@ -16,7 +15,6 @@ export default function Home() {
     <main>
       <Hero />
       <Services />
-      <AboutUs />
       <Stats />
       <Testimonial />
       <Locations />
