@@ -86,10 +86,12 @@ function FadeUp({
   children,
   delay = 0,
   className = "",
+  style = {},
 }: {
   children: React.ReactNode;
   delay?: number;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const [ref, visible] =
     useInView();
@@ -107,6 +109,8 @@ function FadeUp({
 
         transition:
           `opacity .75s ease ${delay}ms,transform .75s ease ${delay}ms`,
+
+        ...style,
       }}
     >
       {children}
@@ -165,7 +169,7 @@ export default function AboutUs() {
 
             {/* STATS */}
             <div className="about-stats-grid" style={{ marginTop:40, display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:14 }}>
-              {[{ value:2024,suffix:"",label:"Founded"},{ value:7,suffix:"+",label:"Years Experience"},{ value:100,suffix:"%",label:"Excellence"},{ value:2,suffix:"",label:"Border Hubs"}].map(({ value,suffix,label },i) => (
+              {[{ value:2024,suffix:"",label:"Founded"},{ value:7,suffix:"+",label:"Years Experienced Professionals"},{ value:100,suffix:"%",label:"Excellence"},{ value:2,suffix:"",label:"Border Hubs"}].map(({ value,suffix,label },i) => (
                 <FadeUp key={label} delay={280 + i*80}>
                   <div className="stat-pill" style={{ textAlign:"center" }}>
                     <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(1.8rem,3vw,2.6rem)", fontWeight:700, color:"var(--gold2)", lineHeight:1, margin:0 }}>
