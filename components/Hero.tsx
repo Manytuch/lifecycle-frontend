@@ -35,11 +35,6 @@ const fadeUp = {
   show: {
     opacity: 1,
     y: 0,
-
-    transition: {
-      duration: 0.7,
-      ease: "easeOut",
-    },
   },
 };
 
@@ -380,6 +375,7 @@ export default function Hero() {
               {/* EYEBROW */}
               <motion.div
                 variants={fadeUp}
+                transition={{ duration: 0.7 }}
                 style={{
                   marginBottom: 14,
                 }}
@@ -416,6 +412,7 @@ export default function Hero() {
               {/* TITLE */}
               <motion.h1
                 variants={fadeUp}
+                transition={{ duration: 0.7 }}
                 style={{
                   fontFamily:
                     "'Cormorant Garamond',Georgia,serif",
@@ -454,6 +451,7 @@ export default function Hero() {
               {/* GOLD RULE */}
               <motion.div
                 variants={fadeUp}
+                transition={{ duration: 0.7 }}
                 style={{
                   height: 1,
                   width: 64,
@@ -468,6 +466,7 @@ export default function Hero() {
               {/* SUBTITLE */}
               <motion.p
                 variants={fadeUp}
+                transition={{ duration: 0.7 }}
                 style={{
                   fontFamily:
                     "'DM Sans',sans-serif",
@@ -510,6 +509,7 @@ export default function Hero() {
               {/* BUTTONS */}
               <motion.div
                 variants={fadeUp}
+                transition={{ duration: 0.7 }}
                 className="hero-btns"
                 style={{
                   display: "flex",
@@ -543,6 +543,7 @@ export default function Hero() {
               {/* CHIPS */}
               <motion.div
                 variants={fadeUp}
+                transition={{ duration: 0.7 }}
                 className="hero-chips"
                 style={{
                   display: "flex",
