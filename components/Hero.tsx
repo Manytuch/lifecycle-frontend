@@ -558,12 +558,12 @@ export default function Hero() {
 
                 {[
                   {
-                    value: "2024",
-                    label: "Founded",
+                    value: "Reliable",
+                    label: "Services",
                   },
                   {
-                    value: "7+",
-                    label: "Yrs Experience",
+                    value: "Experienced",
+                    label: "Professionals",
                   },
                   {
                     value: "2",
