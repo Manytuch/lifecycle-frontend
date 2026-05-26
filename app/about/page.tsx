@@ -2,33 +2,113 @@
 import { useEffect, useRef, useState } from "react";
 import { Building2, Target, Eye, ArrowRight } from "lucide-react";
 
-function useInView(threshold = 0.15) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold });
-    obs.observe(el); return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, visible];
-}
+function useInView(
+  threshold = 0.15
+) {
+  const ref =
+    useRef<HTMLDivElement | null>(
+      null
+    );
 
-function Counter({ end, suffix = "" }) {
-  const [count, setCount] = useState(0);
-  const [ref, visible] = useInView();
+  const [visible, setVisible] =
+    useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+
+    if (!el) return;
+
+    const obs =
+      new IntersectionObserver(
+        ([e]) => {
+          if (e.isIntersecting) {
+            setVisible(true);
+            obs.disconnect();
+          }
+        },
+        { threshold }
+      );
+
+    obs.observe(el);
+
+    return () =>
+      obs.disconnect();
+  }, [threshold]);
+
+  return [ref, visible] as const;
+}
+function Counter({
+  end,
+  suffix = "",
+}: {
+  end: number;
+  suffix?: string;
+}) {
+  const [count, setCount] =
+    useState(0);
+
+  const [ref, visible] =
+    useInView();
+
   useEffect(() => {
     if (!visible) return;
-    let start = 0; const step = Math.ceil(end / 50);
-    const id = setInterval(() => { start += step; if (start >= end) { setCount(end); clearInterval(id); } else setCount(start); }, 28);
-    return () => clearInterval(id);
+
+    let start = 0;
+
+    const step = Math.ceil(
+      end / 50
+    );
+
+    const id = setInterval(() => {
+      start += step;
+
+      if (start >= end) {
+        setCount(end);
+        clearInterval(id);
+      } else {
+        setCount(start);
+      }
+    }, 28);
+
+    return () =>
+      clearInterval(id);
   }, [visible, end]);
-  return <span ref={ref}>{count}{suffix}</span>;
+
+  return (
+    <span ref={ref}>
+      {count}
+      {suffix}
+    </span>
+  );
 }
 
-function FadeUp({ children, delay = 0, className = "" }) {
-  const [ref, visible] = useInView();
+function FadeUp({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const [ref, visible] =
+    useInView();
+
   return (
-    <div ref={ref} className={className} style={{ opacity:visible?1:0, transform:visible?"translateY(0)":"translateY(36px)", transition:`opacity .75s ease ${delay}ms,transform .75s ease ${delay}ms` }}>
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: visible ? 1 : 0,
+
+        transform: visible
+          ? "translateY(0)"
+          : "translateY(36px)",
+
+        transition:
+          `opacity .75s ease ${delay}ms,transform .75s ease ${delay}ms`,
+      }}
+    >
       {children}
     </div>
   );
